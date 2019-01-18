@@ -1,0 +1,151 @@
+---
+title: "Plot statistics from VCF"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(ggpubr)
+```
+
+- Plotting annotations that GATK suggests to use for hard-filtering. The annotations are QD (QUalByDepth), FS (FisherStrand), SOR (StrandOddsRatio), MQ (RMSMappingQuality), MQRankSum (MappingQualityRankSumTest).
+
+- Plotted is the density plot of each of the annotations. Vertial red lines represent the cutoff value suggested by GATK. 
+
+- This is before any filtering. 
+
+- Regions of interests are chrA (autosomes), chrX, chrY, and chrM.
+
+```{r}
+chrA = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/chrA_prefiltering_annotations.txt", header=T)
+chrX = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/chrX_prefiltering_annotations.txt", header=T)
+chrY = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/chrY_prefiltering_annotations.txt", header=T)
+chrM = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/chrM_prefiltering_annotations.txt", header=T)
+```
+
+## QualByDepth (QD)
+
+```{r}
+ggplot(data=chrA, aes(x=QD)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 2, col="red", size=1) +
+  labs(x="QD", y="Density", title="chrA")
+ggplot(data=chrX, aes(x=QD)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 2, col="red", size=1) +
+  labs(x="QD", y="Density", title="chrX")
+ggplot(data=chrY, aes(x=QD)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 2, col="red", size=1) +
+  labs(x="QD", y="Density", title="chrY")
+ggplot(data=chrM, aes(x=QD)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 2, col="red", size=1) +
+  labs(x="QD", y="Density", title="chrM")
+```
+
+## FisherStrand (FS)
+
+```{r}
+ggplot(data=chrA, aes(x=FS)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 60, col="red", size=1) +
+  labs(x="FS", y="Density", title="chrA")
+ggplot(data=chrX, aes(x=FS)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 60, col="red", size=1) +
+  labs(x="FS", y="Density", title="chrX")
+ggplot(data=chrY, aes(x=FS)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 60, col="red", size=1) +
+  labs(x="FS", y="Density", title="chrY")
+ggplot(data=chrM, aes(x=FS)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 60, col="red", size=1) +
+  labs(x="FS", y="Density", title="chrM")
+```
+
+## StrandOddsRatio (SOR)
+
+```{r}
+ggplot(data=chrA, aes(x=SOR)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 3, col="red", size=1) +
+  labs(x="SOR", y="Density", title="chrA")
+ggplot(data=chrX, aes(x=SOR)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 3, col="red", size=1) +
+  labs(x="SOR", y="Density", title="chrX")
+ggplot(data=chrY, aes(x=SOR)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 3, col="red", size=1) +
+  labs(x="SOR", y="Density", title="chrY")
+ggplot(data=chrM, aes(x=SOR)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 3, col="red", size=1) +
+  labs(x="SOR", y="Density", title="chrM")
+```
+
+## RMSMappingQuality (MQ)
+
+```{r}
+ggplot(data=chrA, aes(x=MQ)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 40, col="red", size=1) +
+  labs(x="MQ", y="Density", title="chrA")
+ggplot(data=chrX, aes(x=MQ)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 40, col="red", size=1) +
+  labs(x="MQ", y="Density", title="chrX")
+ggplot(data=chrY, aes(x=MQ)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 40, col="red", size=1) +
+  labs(x="MQ", y="Density", title="chrY")
+ggplot(data=chrM, aes(x=MQ)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = 40, col="red", size=1) +
+  labs(x="MQ", y="Density", title="chrM")
+```
+
+## MappingQualityRankSumTest (MQRankSum)
+
+```{r}
+ggplot(data=chrA, aes(x=MQRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -12.5, col="red", size=1) +
+  labs(x="MQRankSum", y="Density", title="chrA")
+ggplot(data=chrX, aes(x=MQRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -12.5, col="red", size=1) +
+  labs(x="MQRankSum", y="Density", title="chrX")
+ggplot(data=chrY, aes(x=MQRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -12.5, col="red", size=1) +
+  labs(x="MQRankSum", y="Density", title="chrY")
+ggplot(data=chrM, aes(x=MQRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -12.5, col="red", size=1) +
+  labs(x="MQRankSum", y="Density", title="chrM")
+```
+
+## ReadPosRankSumTest (ReadPosRankSum)
+
+```{r}
+ggplot(data=chrA, aes(x=ReadPosRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -8, col="red", size=1) +
+  labs(x="ReadPosRankSum", y="Density", title="chrA")
+ggplot(data=chrX, aes(x=ReadPosRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -8, col="red", size=1) +
+  labs(x="ReadPosRankSum", y="Density", title="chrX")
+ggplot(data=chrY, aes(x=ReadPosRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -8, col="red", size=1) +
+  labs(x="ReadPosRankSum", y="Density", title="chrY")
+ggplot(data=chrM, aes(x=ReadPosRankSum)) +
+  geom_density(size=1) +
+  geom_vline(xintercept = -8, col="red", size=1) +
+  labs(x="ReadPosRankSum", y="Density", title="chrM")
+```

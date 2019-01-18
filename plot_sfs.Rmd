@@ -1,0 +1,87 @@
+---
+title: "Plot SFS"
+author: "Tanya Phung"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(ggpubr)
+```
+
+## Load the dataset
+
+```{r}
+chrA_pre = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/pre_gatk_hard_filter_sfs_chrA.out", header=T)
+chrA_post = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/post_gatk_hard_filter_sfs_chrA.out", heade=T)
+
+chrX_pre = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/pre_gatk_hard_filter_sfs_chrX.out", header=T)
+chrX_post = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/post_gatk_hard_filter_sfs_chrX.out", heade=T)
+
+chrY_pre = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/pre_gatk_hard_filter_sfs_chrY.out", header=T)
+chrY_post = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/post_gatk_hard_filter_sfs_chrY.out", heade=T)
+
+chrM_pre = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/pre_gatk_hard_filter_sfs_chrM.out", header=T)
+chrM_post = read.table("c://Users/tuyen/Documents/postdoc_asu/projects/ngs_filtering/out/post_gatk_hard_filter_sfs_chrM.out", heade=T)
+```
+
+## Compare SFS before and after GATK hard filtering on chrA
+
+```{r}
+p1 = ggplot(data=chrA_pre, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS before filtering", x="Count", y="Number of variants")
+
+p2 = ggplot(data=chrA_post, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS after filtering", x="Count", y="Number of variants")
+ggarrange(p1, p2, ncol=2, nrow=1)
+```
+
+## Compare SFS before and after GATK hard filtering on chrX
+
+```{r}
+p3 = ggplot(data=chrX_pre, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS before filtering", x="Count", y="Number of variants")
+
+p4 = ggplot(data=chrX_post, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS after filtering", x="Count", y="Number of variants")
+ggarrange(p3, p4, ncol=2, nrow=1)
+```
+
+## Compare SFS before and after GATK hard filtering on chrY
+
+```{r}
+p5 = ggplot(data=chrY_pre, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS before filtering", x="Count", y="Number of variants")
+
+p6 = ggplot(data=chrY_post, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS after filtering", x="Count", y="Number of variants")
+ggarrange(p5, p6, ncol=2, nrow=1)
+```
+
+## Compare SFS before and after GATK hard filtering on chrM
+
+```{r}
+p7 = ggplot(data=chrM_pre, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS before filtering", x="Count", y="Number of variants")
+
+p8 = ggplot(data=chrM_post, aes(x=af_bin, y=count)) + 
+  geom_bar(stat = "identity", position=position_dodge(), colour="black", fill=alpha("grey60", 0.7)) +
+  theme(legend.title=element_blank(), text = element_text(size=14), plot.title = element_text(hjust = 0.5, face="bold")) + 
+  labs(title="SFS after filtering", x="Count", y="Number of variants")
+ggarrange(p7, p8, ncol=2, nrow=1)
+```

@@ -1,0 +1,81 @@
+---
+title: "FIlter VCF pipeline"
+author: "Tanya Phung"
+date: "1/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# This document outlines steps for filtering vcf file
+
+## Part A. Variant filtering
+
+* Note: right now, all of the files/scripts are located at: `/scratch/tphung3/tmp/test_filtering/` on agave for testing.
+
+### Step 1. Subset the vcf file into 4 files: chrA (this is autosomes), chrX, chrY, and chrM. 
+
+```
+./subset_vcf_by_chr.sh
+```
+
+### Step 2. Plot the annotations that are recommended by GATK to use as hard-filtering
+* GATK recommends using the following annotations for hard-filtering: QD, FS, SOR, MQ, MQRankSum, ReadPosRankSum
+* First, extract these annotations from the vcf file. I have written a script to do this. I have this script on my github. Note: I used Python 3.7 for this. 
+
+```
+git clone https://github.com/tanyaphung/vcfhelper.git
+```
+
+* This is the command to run to obtain the values of the annotations for each variant
+```
+for i in A X Y M; do
+python ~/softwares/tanya_repos/vcfhelper/extract_stats_from_vcf.py QD FS SOR MQ MQRankSum ReadPosRankSum --vcf pilot_samples.WGS.raw.biallelic.chr${i}.vcf --outfile chr${i}_prefiltering_annotations.txt
+done;
+```
+
+* To visualize, I have written an Rscript for this, called `plot_statistics.Rmd`
+
+### Step 3: Filter variants using GATK hard-filter
+
+```
+./hard_fitler.sh
+```
+
+* It is useful to always be checking how many variants you have before and after filtering. To do this, I have written a script that can be found in the vcfhelper library. To check how many variants in chrA, chrX, chrY, and chrM, we can do:
+
+```
+for i in A X Y M; do
+python ~/softwares/tanya_repos/vcfhelper/calc_num_site_in_vcf.py --vcf pilot_samples.WGS.raw.biallelic.chr${i}.vcf
+done;
+```
+
+```{r kable}
+data = data.frame(chr=c("chrA", "chrX", "chrY", "chrM"), "Before filtering" = c(12076084, 465965, 0, 244), "After filtering" = c(11934211, 462987, 0, 244), "Removed" = c(141873, 2978, 0, 0))
+
+library(knitr)
+kable(data, digits=2)
+```
+
+* As you can see, the GATK hard filter did not actually remove many variants. This is also being reflected in the site-frequency-spetrum. 
+
+### Step 4: Calculate the site-frequency-spectrum (SFS)
+* To obtain the SFS, you can use my script called `popgen_tools`
+
+```
+git clone https://github.com/tanyaphung/popgen_tools.git
+```
+
+```
+for i in A X Y M; do
+python ~/softwares/tanya_repos/popgen_tools/popgen_tools.py --vcf_file pilot_samples.WGS.raw.biallelic.chr${i}.vcf --sfs_all --sfs_all_out pre_gatk_hard_filter_sfs_chr${i}.out
+done;
+
+for i in A X Y M; do python ~/softwares/tanya_repos/popgen_tools/popgen_tools.py --vcf_file pilot_samples.WGS.raw.hardfilter.sv.biallelic.chr${i}.vcf --sfs_all --sfs_all_out post_gatk_hard_filter_sfs_chr${i}.out ; done;
+```
+
+* To visualize the SFS, I have written an R script for this, called `plot_sfs.Rmd`. As you can see, the SFS before and after GATK hard-filter does not change much. 
+
+
